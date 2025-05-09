@@ -6,3 +6,5 @@ fastapi
 streamlit
 gspread
 oauth2client
+flake8
+pytest
