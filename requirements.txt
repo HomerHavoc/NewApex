@@ -1,0 +1,8 @@
+pandas
+numpy
+requests
+scikit-learn
+fastapi
+streamlit
+gspread
+oauth2client
