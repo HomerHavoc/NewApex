@@ -1,0 +1,38 @@
+name: Apex Arc Engine – Run + Commit CSV
+
+on:
+  workflow_dispatch: {}
+  schedule:
+    - cron: '30 13 * * *'
+
+jobs:
+  run-apex:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Set PYTHONPATH
+      run: echo "PYTHONPATH=${{ github.workspace }}" >> $GITHUB_ENV
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+
+    - name: Install dependencies
+      run: |
+        pip install -r requirements.txt
+
+    - name: Run Prediction Engine
+      run: |
+        python main.py
+
+    - name: Commit CSV Result
+      run: |
+        git config --global user.name "github-actions"
+        git config --global user.email "actions@github.com"
+        git add top_100_hr_predictions.csv
+        git commit -m "Auto-upload: HR predictions for today" || echo "No changes to commit"
+        git push
